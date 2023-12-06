@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- This script got from frontendfreecode.com -->
+
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.css'>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css'>
+    <script src='https://code.jquery.com/jquery-3.3.1.js'></script>
+    <script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.js'></script>
+    <script src='https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/extensions/export/bootstrap-table-export.js'></script>
+
+    <style>
+        * {
+            font-size: 0.93rem;
+        }
+
+        .fa-refresh::before {
+            content: "\f2f1";
+        }
+
+        .fa-toggle-up:before,
+        .fa-caret-square-o-up:before {
+            content: "\f151";
+        }
+
+        .fa-toggle-down:before,
+        .fa-caret-square-o-down:before {
+            content: "\f150";
+        }
+
+        .fa-toggle-on:before {
+            content: "\f205";
+        }
+
+        .fa-toggle-off:before {
+            content: "\f204";
+        }
+
+        .dropdown-menu > li > a {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: 400;
+            line-height: 1.42857143;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu > li > a:hover,
+        .dropdown-menu > li > a:focus {
+            color: #262626;
+            text-decoration: none;
+            background-color: #f5f5f5;
+        }
+
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #428bca;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #428bca !important;
+            border-color: #428bca !important;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle i,
+        .nav-link i {
+            font-size: 12px;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .dropdown-header {
+            display: block;
+            padding: 0rem 1.5rem;
+            margin-bottom: 0;
+            font-size: 0.875rem;
+            color: #868e96;
+            white-space: nowrap;
+        }
+
+        .dropdown-toggle::after {
+            border-top: none;
+            border-right: none;
+            border-left: none;
+        }
+
+        .dropdown-menu {
+            border: 0px;
+            border-radius: 0.25rem;
+            box-shadow: 0px 3px 6px #999;
+            z-index: 9999;
+        }
+
+        .dropdown-menu > .active > a,
+        .dropdown-menu > .active > a:hover,
+        .dropdown-menu > .active > a:focus {
+            color: #fff !important;
+            text-decoration: none;
+            background-color: #428bca !important;
+            outline: 0;
+        }
+
+        .dropdown-menu > li > a {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: 400;
+            line-height: 1.42857143;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu > li > a:hover,
+        .dropdown-menu > li > a:focus {
+            color: #262626;
+            text-decoration: none;
+            background-color: #f5f5f5;
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 0.25rem 1.5rem;
+            clear: both;
+            font-weight: normal;
+            /*color: #212529;*/
+            color: #555 !important;
+            /*cosine-edit*/
+            text-align: inherit;
+            white-space: nowrap;
+            background: none;
+            border: 0;
+            font-size: 12px;
+            /*cosine-edit*/
+        }
+
+        .dropdown-item:focus,
+        .dropdown-item:hover {
+            /*color: #16181b;*/
+            color: #ffffff !important;
+            /*cosine-edit*/
+            text-decoration: none;
+            /*background-color: #f8f9fa;*/
+            background-color: #999 !important;
+            /*cosine-edit*/
+            transition: background-color 0.3s, color 0.2s;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div id="toolbar">
+        <button id="remove" class="btn btn-danger" disabled>Delete <i class="fas fa-trash-alt"></i></button>
+    </div>
+
+    <table id="table">
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="10%"/>
+        <col width="10%"/>
+        <col width="20%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="10%"/>
+        <col width="10%"/>
+        <col width="20%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="10%"/>
+        <col width="10%"/>
+        <col width="20%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="10%"/>
+        <col width="10%"/>
+        <col width="20%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+        <col width="5%"/>
+
+        <tbody>
+        <tr>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>3</td>
+            <td>2017/10/31</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>4</td>
+            <td>2017/10/30</td>
+            <td>google</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>5</td>
+            <td>2017/10/31</td>
+            <td>google</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>6</td>
+            <td>2017/10/30</td>
+            <td>google</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>60000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>7</td>
+            <td>2017/10/31</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>60000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>8</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>60000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>9</td>
+            <td>2017/10/31</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>60000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>10</td>
+            <td>2017/10/30</td>
+            <td>msn</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>60000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>11</td>
+            <td>2017/10/31</td>
+            <td>msn</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>60000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>12</td>
+            <td>2017/10/30</td>
+            <td>msn</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>60000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>13</td>
+            <td>2017/10/31</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>70000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>14</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>70000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>15</td>
+            <td>2017/10/31</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>70000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>16</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>70000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>17</td>
+            <td>2017/10/31</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>70000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>18</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>70000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>2</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034840</td>
+            <td>2019/01/30</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td></td>
+            <td>1</td>
+            <td>2017/10/30</td>
+            <td>yahoo</td>
+            <td>dk-034841</td>
+            <td>2019/01/31</td>
+            <td>100</td>
+            <td>50000</td>
+            <td>10 PM</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div id="bcl"><a style="font-size:8pt;text-decoration:none;" href="http://www.devanswer.com">Free Frontend</a></div>
+<script>
+    var $table = $("#table"),
+        $remove = $("#remove"),
+        selections = [];
+    $(function () {
+        $table.bootstrapTable("destroy");
+        $table.bootstrapTable({
+            columns: [
+                [
+                    {
+                        field: "state",
+                        checkbox: true,
+                        align: "center",
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "ID",
+                        field: "id",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Date",
+                        field: "date",
+                        sortable: true,
+                        valign: "middle",
+                        id: "dob",
+                        editable: {
+                            type: "combodate",
+                            format: "YYYY/MM/DD",
+                            template: "YYYY / MM / DD",
+                            combodate: {
+                                maxYear: 2030,
+                                minYear: 2018,
+                                firstItem: "none" //'name', 'empty', 'none'
+                            },
+                            emptytext: "-"
+                        }
+                    },
+
+
+                    {
+                        title: "Supplier",
+                        field: "supplier",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Items",
+                        field: "items",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Deadline",
+                        field: "deadline",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Quantity",
+                        field: "quantity",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Amount",
+                        field: "amount",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "number"
+                        }
+                    },
+
+
+                    {
+                        title: "Closing",
+                        field: "closing",
+                        align: "center",
+                        sortable: true,
+                        id: "status",
+                        valign: "middle",
+                        editable: {
+                            type: "select",
+                            placement: "right",
+                            value: "是",
+                            source: [{value: "10 PM", text: "10 PM"}, {value: "是", text: "是"}]
+                        }
+                    },
+
+
+                    {
+                        title: "Progress",
+                        field: "progress",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Print",
+                        field: "print",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Action",
+                        field: "action",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle",
+                        events: actionEvents,
+                        formatter: actionFormatter
+                    },
+
+                    {
+                        field: "state",
+                        checkbox: true,
+                        align: "center",
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "ID",
+                        field: "id",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Date",
+                        field: "date",
+                        sortable: true,
+                        valign: "middle",
+                        id: "dob",
+                        editable: {
+                            type: "combodate",
+                            format: "YYYY/MM/DD",
+                            template: "YYYY / MM / DD",
+                            combodate: {
+                                maxYear: 2030,
+                                minYear: 2018,
+                                firstItem: "none" //'name', 'empty', 'none'
+                            },
+                            emptytext: "-"
+                        }
+                    },
+
+
+                    {
+                        title: "Supplier",
+                        field: "supplier",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Items",
+                        field: "items",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Deadline",
+                        field: "deadline",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Quantity",
+                        field: "quantity",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Amount",
+                        field: "amount",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "number"
+                        }
+                    },
+
+
+                    {
+                        title: "Closing",
+                        field: "closing",
+                        align: "center",
+                        sortable: true,
+                        id: "status",
+                        valign: "middle",
+                        editable: {
+                            type: "select",
+                            placement: "right",
+                            value: "是",
+                            source: [{value: "10 PM", text: "10 PM"}, {value: "是", text: "是"}]
+                        }
+                    },
+
+
+                    {
+                        title: "Progress",
+                        field: "progress",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Print",
+                        field: "print",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Action",
+                        field: "action",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle",
+                        events: actionEvents,
+                        formatter: actionFormatter
+                    },
+                    {
+                        field: "state",
+                        checkbox: true,
+                        align: "center",
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "ID",
+                        field: "id",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Date",
+                        field: "date",
+                        sortable: true,
+                        valign: "middle",
+                        id: "dob",
+                        editable: {
+                            type: "combodate",
+                            format: "YYYY/MM/DD",
+                            template: "YYYY / MM / DD",
+                            combodate: {
+                                maxYear: 2030,
+                                minYear: 2018,
+                                firstItem: "none" //'name', 'empty', 'none'
+                            },
+                            emptytext: "-"
+                        }
+                    },
+
+
+                    {
+                        title: "Supplier",
+                        field: "supplier",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Items",
+                        field: "items",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Deadline",
+                        field: "deadline",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Quantity",
+                        field: "quantity",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Amount",
+                        field: "amount",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "number"
+                        }
+                    },
+
+
+                    {
+                        title: "Closing",
+                        field: "closing",
+                        align: "center",
+                        sortable: true,
+                        id: "status",
+                        valign: "middle",
+                        editable: {
+                            type: "select",
+                            placement: "right",
+                            value: "是",
+                            source: [{value: "10 PM", text: "10 PM"}, {value: "是", text: "是"}]
+                        }
+                    },
+
+
+                    {
+                        title: "Progress",
+                        field: "progress",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Print",
+                        field: "print",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Action",
+                        field: "action",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle",
+                        events: actionEvents,
+                        formatter: actionFormatter
+                    },
+
+                    {
+                        field: "state",
+                        checkbox: true,
+                        align: "center",
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "ID",
+                        field: "id",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Date",
+                        field: "date",
+                        sortable: true,
+                        valign: "middle",
+                        id: "dob",
+                        editable: {
+                            type: "combodate",
+                            format: "YYYY/MM/DD",
+                            template: "YYYY / MM / DD",
+                            combodate: {
+                                maxYear: 2030,
+                                minYear: 2018,
+                                firstItem: "none" //'name', 'empty', 'none'
+                            },
+                            emptytext: "-"
+                        }
+                    },
+
+
+                    {
+                        title: "Supplier",
+                        field: "supplier",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Items",
+                        field: "items",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Deadline",
+                        field: "deadline",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Quantity",
+                        field: "quantity",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "text"
+                        }
+                    },
+
+
+                    {
+                        title: "Amount",
+                        field: "amount",
+                        sortable: true,
+                        valign: "middle",
+                        editable: {
+                            type: "number"
+                        }
+                    },
+
+
+                    {
+                        title: "Closing",
+                        field: "closing",
+                        align: "center",
+                        sortable: true,
+                        id: "status",
+                        valign: "middle",
+                        editable: {
+                            type: "select",
+                            placement: "right",
+                            value: "是",
+                            source: [{value: "10 PM", text: "10 PM"}, {value: "是", text: "是"}]
+                        }
+                    },
+
+
+                    {
+                        title: "Progress",
+                        field: "progress",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Print",
+                        field: "print",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle"
+                    },
+
+                    {
+                        title: "Action",
+                        field: "action",
+                        align: "center",
+                        sortable: true,
+                        valign: "middle",
+                        events: actionEvents,
+                        formatter: actionFormatter
+                    }
+
+                ]],
+
+
+            classes: "table table-hover table-no-bordered",
+            toolbar: "#toolbar",
+            buttonsClass: "outline-secondary",
+            sortClass: undefined,
+            undefinedText: "-",
+            striped: true,
+            sortName: "number",
+            sortOrder: "desc",
+            sortStable: false,
+            sortable: true,
+            pagination: true,
+            paginationLoop: false,
+            onlyInfoPagination: false,
+            pageNumber: 1,
+            pageSize: 12,
+            pageList: [12, 24, "ALL"],
+            paginationPreText: "Previous",
+            paginationNextText: "Next",
+            selectItemName: "btSelectItem",
+            smartDisplay: true,
+            search: true,
+            searchOnEnterKey: false,
+            strictSearch: false,
+            searchText: "",
+            searchTimeOut: "500",
+            trimOnSearch: true,
+            searchalign: "right",
+            buttonsAlign: "right",
+            toolbarAlign: "left",
+            paginationVAlign: "bottom",
+            paginationHAlign: "right",
+            paginationDetailHAlign: "left",
+            showHeader: true,
+            showFooter: false,
+            showColumns: true,
+            showRefresh: true,
+            showToggle: false,
+            showExport: true,
+            showPaginationSwitch: true,
+            showFullscreen: false,
+            minimumCountColumns: 5,
+            idField: undefined,
+            clickToSelect: false,
+            uniqueId: "id",
+            singleSelect: false,
+            checkboxHeader: true,
+            maintainSelected: true
+            // reorderableColumns: true,
+            // iconsPrefix: "material-icons", // material-icons of fa (font awesome)
+            // icons: {
+            //   paginationSwitchDown: "material-icons-collapse-down icon-chevron-down",
+            //   paginationSwitchUp: "material-icons-collapse-up icon-chevron-up",
+            //   refresh: "material-icons-refresh icon-refresh",
+            //   toggle: "material-icons-list-alt icon-list-alt",
+            //   columns: "material-icons-th icon-th",
+            //   detailOpen: "glyphicon-plus icon-plus",
+            //   detailClose: "glyphicon-minus icon-minus"
+            // }
+        });
+        $table.on(
+            "check.bs.table uncheck.bs.table " +
+            "check-all.bs.table uncheck-all.bs.table",
+            function () {
+                $remove.prop("disabled", !$table.bootstrapTable("getSelections").length);
+                selections = getIdSelections();
+            });
+
+        $remove.click(function () {
+            var ids = getIdSelections();
+            $table.bootstrapTable("remove", {
+                field: "id",
+                values: ids
+            });
+
+            $remove.prop("disabled", true);
+        });
+        $('[data-toggle="dropdown"] >i').removeClass("glyphicon-export").addClass("fa-download");
+    });
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable("getSelections"), function (row) {
+            return row.id;
+        });
+    }
+
+    function actionFormatter(value, row, index) {
+        return ['<button class="remove btn btn-danger btn-sm">Delete</button>'].join(
+            "");
+
+    }
+
+    window.actionEvents = {
+        "click .remove": function (e, value, row, index) {
+            $table.bootstrapTable("remove", {
+                field: "id",
+                values: [row.id]
+            });
+
+        }
+    };
+</script>
+
+</body>
+</html>

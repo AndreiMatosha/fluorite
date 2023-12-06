@@ -1,0 +1,9 @@
+venv
+.git
+.gitignore
+pyvenv.cfg
+Scripts
+Lib
+Include
+.idea
+__pycache__
